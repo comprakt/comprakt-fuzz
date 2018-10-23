@@ -1,5 +1,3 @@
-[![Build Status](https://travis-ci.org/comprakt/comprakt.svg?branch=master)](https://travis-ci.org/comprakt/comprakt)
-
 # comprakt-fuzz
 
 A fuzzer for the [MiniJava](https://pp.ipd.kit.edu/lehre/WS201819/compprakt/intern/sprachbericht.pdf) language

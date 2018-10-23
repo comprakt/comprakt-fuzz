@@ -13,6 +13,8 @@ def main():
                         help="number of files that should be produced")
     parser.add_argument("--vim_format", dest="vim_format", action="store_true",
                         help="format the output files with vim")
+    parser.add_argument("--lexer", dest="lexer", action="store_true",
+                        help="fuzz lexer test cases without caring about the syntax")
 
     args = parser.parse_args()
 
@@ -20,8 +22,19 @@ def main():
         os.makedirs(args.out_dir)
 
     fuzzer = gramfuzz.GramFuzzer()
-    fuzzer.load_grammar(os.path.join(os.path.dirname(os.path.abspath(__file__)), "minijava_grammar.py"))
-    minijava = fuzzer.gen(cat="minijava", num=args.num, auto_process=False)
+    ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
+    grammar = "minijava_grammar.py"
+    category = "minijava"
+    if args.lexer:
+        grammar = "lexer_grammar.py"
+        category = "minijava_lex"
+    fuzzer.load_grammar(os.path.join(ROOT_DIR, grammar))
+
+    minijava = fuzzer.gen(
+        cat=category,
+        num=args.num,
+        auto_process=False,
+    )
 
     for i in range(0, args.num):
         filename = args.out_dir + "/" + uuid.uuid4().hex + ".java"

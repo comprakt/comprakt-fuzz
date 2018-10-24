@@ -36,6 +36,7 @@ optional arguments:
                         the output directory for the fuzzed files
   -n NUM                number of files that should be produced
   --vim_format          format the output files with vim
+  --lexer               fuzz lexer test cases without caring about the syntax
 ```
 
 Without any arguments 10 files will get generated in the directory `output`.

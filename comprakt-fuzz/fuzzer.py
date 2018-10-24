@@ -30,16 +30,20 @@ def main():
         category = "minijava_lex"
     fuzzer.load_grammar(os.path.join(ROOT_DIR, grammar))
 
-    minijava = fuzzer.gen(
+    (tokens, minijava) = fuzzer.gen(
         cat=category,
         num=args.num,
         auto_process=False,
     )
 
     for i in range(0, args.num):
-        filename = args.out_dir + "/" + uuid.uuid4().hex + ".java"
-        with open(filename, "w") as file:
+        filename = args.out_dir + "/" + uuid.uuid4().hex
+
+        with open(filename + ".java", "w") as file:
             file.write(minijava[i])
 
+        with open(filename + ".tokens", "w") as file:
+            file.write(tokens[i])
+
         if args.vim_format:
-            os.system("""vim +"execute 'normal! =G' | :wq! """ + filename + """" """ + filename)
+            os.system("""vim +"execute 'normal! =G' | :wq! """ + filename + """.java" """ + filename + ".java")

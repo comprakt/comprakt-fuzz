@@ -243,7 +243,7 @@ Def("TokenString",
             KEYWORDS,
             OP_SEP,
         ),
-        sep="",
+        sep=" ",
         max=100,
     ),
     cat="minijava_lex")

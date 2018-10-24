@@ -12,14 +12,14 @@ This fuzzer only works with `python2.7`. A virtual environment is recommended.
 pip install virutalenv
 virtualenv venv -p python2.7
 source venv/bin/activate
-pip install .
+python setup.py install
 python -m comprakt-fuzz
 ```
 
 ### Details
 
-As a first step you can install the fuzzer with `pip install .` or alternatively
-with `python setup.py install`.
+As a first step you can install the fuzzer with `python setup.py install` or
+alternatively with `pip install . --process-dependency-links`.
 
 After installing it the fuzzer can be run with
 

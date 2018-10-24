@@ -14,7 +14,10 @@ setuptools.setup(
     url="https://github.com/comprakt/comprakt-fuzz",
     packages=setuptools.find_packages(),
     install_requires=[
-        'gramfuzz',
+        'gramfuzz==1.3.1',
+    ],
+    dependency_links=[
+        'https://github.com/flip1995/gramfuzz/tarball/master#egg=gramfuzz-1.3.1'
     ],
     classifiers=[
         "Programming Language :: Python :: 2.7",

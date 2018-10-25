@@ -37,13 +37,13 @@ def main():
     )
 
     for i in range(0, args.num):
-        filename = args.out_dir + "/" + uuid.uuid4().hex
+        filename = args.out_dir + "/" + uuid.uuid4().hex + ".mj"
 
-        with open(filename + ".java", "w") as file:
+        with open(filename, "w") as file:
             file.write(minijava[i])
 
-        with open(filename + ".tokens", "w") as file:
-            file.write(tokens[i])
+        with open(filename + ".out", "w") as file:
+            file.write(tokens[i] + "\nEOF")
 
         if args.vim_format:
             os.system("""vim +"execute 'normal! =G' | :wq! """ + filename + """.java" """ + filename + ".java")

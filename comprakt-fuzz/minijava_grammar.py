@@ -1,11 +1,14 @@
 from gramfuzz.fields import *
 from config import *
 
-INTEGER_LITERAL = String(charset=String.charset_num, min=1, max=10)
+INTEGER_LITERAL = And(
+    String(charset='123456789', min=1, max=1),
+    String(charset=String.charset_num, min=0, max=9),
+)
 
 IDENT = And(
     String(charset=String.charset_alpha + "_", min=1, max=1),
-    String(charset=String.charset_alphanum + "_", max=MAX_STRING_LENGTH - 1)
+    String(charset=String.charset_alphanum + "_", max=MAX_STRING_LENGTH - 1),
 )
 
 

@@ -1,6 +1,6 @@
 from gramfuzz.fields import *
 from minijava_grammar import IDENT, INTEGER_LITERAL, TokenDef, TokenRef
-from config import COMMENTS_ENABLED
+from config import BAD_COMMENTS_ENABLED, GOOD_COMMENTS_ENABLED
 
 TokenDef("identifier ",
          IDENT)
@@ -216,7 +216,7 @@ KEYWORDS = Or(
 
 WHITESPACES = Or(" ", "\n", "\r", "\t")
 
-if COMMENTS_ENABLED:
+if BAD_COMMENTS_ENABLED:
     COMMENT = And(
         "/*",
         Join(
@@ -229,6 +229,20 @@ if COMMENTS_ENABLED:
             max=10,
         ),
         Opt("*/")
+    )
+elif GOOD_COMMENTS_ENABLED:
+    COMMENT = And(
+        "/*",
+        Join(
+            Or(
+                IDENT,
+                WHITESPACES,
+                Opt("/*"),
+            ),
+            sep=" ",
+            max=10,
+        ),
+        "*/"
     )
 else:
     COMMENT = String(min=0, max=0)

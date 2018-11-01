@@ -13,6 +13,8 @@ def main():
                         help="number of files that should be produced")
     parser.add_argument("--vim_format", dest="vim_format", action="store_true",
                         help="format the output files with vim")
+    parser.add_argument("--token", dest="token", action="store_true",
+                        help="generate token list file")
     parser.add_argument("--lexer", dest="lexer", action="store_true",
                         help="fuzz lexer test cases without caring about the syntax")
 
@@ -42,8 +44,9 @@ def main():
         with open(filename, "w") as file:
             file.write(minijava[i])
 
-        with open(filename + ".out", "w") as file:
-            file.write(tokens[i] + "\nEOF")
+        if args.token:
+            with open(filename + ".out", "w") as file:
+                file.write(tokens[i] + "\nEOF")
 
         if args.vim_format:
             os.system("""vim +"execute 'normal! =G' | :wq! """ + filename + """.java" """ + filename + ".java")

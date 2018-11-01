@@ -1,5 +1,6 @@
-from gramfuzz.fields import *
-from config import *
+from gramfuzz.fields import Def, Ref, And, Or, Join, STAR, String, Opt
+from config import MAX_STRING_LENGTH, MAX_CLASS_MEMBERS, MAX_BLOCK_STATEMENTS, MAX_POSTFIX_OPS, MAX_ARGUMENTS, \
+    MAX_ARRAY_DECL_DIMENSION, MAX_CLASSES, MAX_EXPRESSION_REPEAT
 
 INTEGER_LITERAL = And(
     String(charset='123456789', min=1, max=1),
@@ -42,19 +43,19 @@ TokenDef("void", "void")
 TokenDef("String", "String")
 TokenDef("throws", "throws ")
 TokenDef("=", " = ")
-TokenDef("||", " ||")
-TokenDef("&&", " &&")
-TokenDef("==", " ==")
-TokenDef("!=", " !=")
-TokenDef("<", " <")
-TokenDef("<=", " <=")
-TokenDef(">", " >")
-TokenDef(">=", " >=")
-TokenDef("+", " +")
-TokenDef("-", " -")
-TokenDef("*", " +")
-TokenDef("/", " /")
-TokenDef("%", " %")
+TokenDef("||", " || ")
+TokenDef("&&", " && ")
+TokenDef("==", " == ")
+TokenDef("!=", " != ")
+TokenDef("<", " < ")
+TokenDef("<=", " <= ")
+TokenDef(">", " > ")
+TokenDef(">=", " >= ")
+TokenDef("+", " + ")
+TokenDef("-", " - ")
+TokenDef("*", " * ")
+TokenDef("/", " / ")
+TokenDef("%", " % ")
 TokenDef("!", "!")
 TokenDef(".", ".")
 TokenDef(",", ", ")
@@ -266,86 +267,109 @@ Def("ReturnStatement",
     ))
 
 Def("Expression",
-    Ref("AssignmentExpression"))
-
-Def("AssignmentExpression",
     And(
         Ref("LogicalOrExpression"),
-        Opt(
-            TokenRef("="),
-            Ref("AssignmentExpression"),
-        )
+        STAR(
+            And(
+                TokenRef("="),
+                Ref("LogicalOrExpression"),
+            ),
+            sep="",
+            max=MAX_EXPRESSION_REPEAT,
+        ),
     ))
 
 Def("LogicalOrExpression",
     And(
-        Opt(
-            Ref("LogicalOrExpression"),
-            TokenRef("||"),
-        ),
         Ref("LogicalAndExpression"),
+        STAR(
+            And(
+                TokenRef("||"),
+                Ref("LogicalAndExpression"),
+            ),
+            sep="",
+            max=MAX_EXPRESSION_REPEAT,
+        ),
     ))
 
 Def("LogicalAndExpression",
     And(
-        Opt(
-            Ref("LogicalAndExpression"),
-            TokenRef("&&"),
-        ),
         Ref("EqualityExpression"),
+        STAR(
+            And(
+                TokenRef("&&"),
+                Ref("EqualityExpression"),
+            ),
+            sep="",
+            max=MAX_EXPRESSION_REPEAT,
+        ),
     ))
 
 Def("EqualityExpression",
     And(
-        Opt(
-            Ref("EqualityExpression"),
-            Or(
-                TokenRef("=="),
-                TokenRef("!="),
-            ),
-        ),
         Ref("RelationalExpression"),
+        STAR(
+            And(
+                Or(
+                    TokenRef("=="),
+                    TokenRef("!="),
+                ),
+                Ref("RelationalExpression"),
+            ),
+            sep="",
+            max=MAX_EXPRESSION_REPEAT,
+        ),
     ))
 
 Def("RelationalExpression",
     And(
-        Opt(
-            Ref("RelationalExpression"),
-            Or(
-                TokenRef("<"),
-                TokenRef("<="),
-                TokenRef(">"),
-                TokenRef(">="),
-            ),
-        ),
         Ref("AdditiveExpression"),
+        STAR(
+            And(
+                Or(
+                    TokenRef("<"),
+                    TokenRef("<="),
+                    TokenRef(">"),
+                    TokenRef(">="),
+                ),
+                Ref("AdditiveExpression"),
+            ),
+            sep="",
+            max=MAX_EXPRESSION_REPEAT,
+        ),
     ))
 
 Def("AdditiveExpression",
     And(
-        Opt(
-            Ref("AdditiveExpression"),
-            Or(
-                TokenRef("+"),
-                TokenRef("-"),
-            ),
-        ),
         Ref("MultiplicativeExpression"),
+        STAR(
+            And(
+                Or(
+                    TokenRef("+"),
+                    TokenRef("-"),
+                ),
+                Ref("MultiplicativeExpression"),
+            ),
+            sep="",
+            max=MAX_EXPRESSION_REPEAT,
+        ),
     ))
 
 Def("MultiplicativeExpression",
     And(
-        Opt(
-            Ref("MultiplicativeExpression"),
-            Or(
-                TokenRef("*"),
-                TokenRef("/"),
-                TokenRef("%"),
+        Ref("UnaryExpression"),
+        STAR(
+            And(
+                Or(
+                    TokenRef("*"),
+                    TokenRef("/"),
+                    TokenRef("%"),
+                ),
+                Ref("UnaryExpression"),
             ),
+            sep="",
+            max=MAX_EXPRESSION_REPEAT,
         ),
-        And(
-            Ref("UnaryExpression"),
-        )
     ))
 
 Def("UnaryExpression",

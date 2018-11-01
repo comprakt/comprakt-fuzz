@@ -2,6 +2,7 @@ import gramfuzz
 import os
 import uuid
 from argparse import ArgumentParser
+from config import RECURSION_LIMIT
 
 
 def main():
@@ -24,6 +25,8 @@ def main():
         os.makedirs(args.out_dir)
 
     fuzzer = gramfuzz.GramFuzzer()
+    fuzzer.set_max_recursion(RECURSION_LIMIT)
+
     ROOT_DIR = os.path.dirname(os.path.abspath(__file__))
     grammar = "minijava_grammar.py"
     category = "minijava"
